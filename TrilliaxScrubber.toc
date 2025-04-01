@@ -1,0 +1,11 @@
+## Interface: 70100
+## Title: Trilliax Scrubber
+## Author: Skamer
+## Notes: Show the scrubbers energy of Trilliax on the nameplates and alert you when they're near exploding.
+## SavedVariables: TrilliaxScrubberDB
+## Version: 1.2.4 (release)
+## Dependencies: PLoop, Scorpio
+
+embeds.xml
+TrilliaxScrubber.lua
+Options.lua
