@@ -3,7 +3,7 @@
 -- @Author   : Skamer <https://mods.curse.com/members/DevSkamer>              --
 -- @Website  : https://wow.curseforge.com/projects/trilliaxscrubber        --
 -- ========================================================================== --
-Scorpio                   "TrilliaxScrubber"                             "1.2.3"
+Scorpio                   "TrilliaxScrubber"                                  ""
 -- ========================================================================== --
 namespace "TSC"
 import "System"
@@ -38,117 +38,118 @@ local IsCasting = {}
 -- ========================================================================== --
 -- Class Definition
 -- ========================================================================== --
-class "InfoBox"
-  __Arguments__{ Number }
-  function SetBombNum(self, num)
-    self.frame.bombText:SetText(tostring(num))
-  end
-
-  __Arguments__ { String }
-  function SetText(self, text)
-    self.frame.text:SetText(text)
-  end
-
-  function Lock(self)
-    self.frame:EnableMouse(false)
-    self.frame:SetMovable(false)
-  end
-
-  function Unlock(self)
-    self.frame:EnableMouse(true)
-    self.frame:SetMovable(true)
-  end
-
-  __Arguments__ { Boolean }
-  function SetLocked(self, locked)
-    if locked then
-      self:Lock()
-    else
-      self:Unlock()
+class "InfoBox" (function(_ENV)
+    __Arguments__{ Number }
+    function SetBombNum(self, num)
+      self.frame.bombText:SetText(tostring(num))
     end
-  end
 
-  function Hide(self)
-    self.frame:Hide()
-  end
-
-  function Show(self)
-    self.frame:Show()
-  end
-
-  function ToggleShow(self)
-    if self.frame:IsShown() then
-      self:Hide()
-    else
-      self:Show()
+    __Arguments__ { String }
+    function SetText(self, text)
+      self.frame.text:SetText(text)
     end
-  end
 
-  function ShowText(self)
-    self.frame.text:Show()
-  end
+    function Lock(self)
+      self.frame:EnableMouse(false)
+      self.frame:SetMovable(false)
+    end
 
-  function HideText(self)
-    self.frame.text:Hide()
-  end
+    function Unlock(self)
+      self.frame:EnableMouse(true)
+      self.frame:SetMovable(true)
+    end
 
-  function SetPosition(self, x, y)
-    self.frame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x, y)
-  end
+    __Arguments__ { Boolean }
+    function SetLocked(self, locked)
+      if locked then
+        self:Lock()
+      else
+        self:Unlock()
+      end
+    end
 
-  local function HandleFrameDragStop(frame)
-    frame:StopMovingOrSizing()
+    function Hide(self)
+      self.frame:Hide()
+    end
 
-    x = frame:GetLeft()
-    y = frame:GetBottom()
+    function Show(self)
+      self.frame:Show()
+    end
 
-    _DB.InfoBox.offsetX = x
-    _DB.InfoBox.offsetY = y
-  end
+    function ToggleShow(self)
+      if self.frame:IsShown() then
+        self:Hide()
+      else
+        self:Show()
+      end
+    end
 
-  function InfoBox(self)
-    local frame = CreateFrame("Frame")
-    frame:SetPoint("CENTER")
-    frame:SetHeight(64)
-    frame:SetWidth(200)
+    function ShowText(self)
+      self.frame.text:Show()
+    end
 
-    local bombIcon = frame:CreateTexture()
-    bombIcon:SetTexture(_BombTexture)
-    bombIcon:SetHeight(24)
-    bombIcon:SetWidth(24)
-    bombIcon:SetPoint("LEFT")
-    bombIcon:SetVertexColor(1, 0, 0)
-    frame.bombIcon = bombIcon
+    function HideText(self)
+      self.frame.text:Hide()
+    end
 
-    local bombText = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    bombText:SetText("3")
-    bombText:SetPoint("CENTER", bombIcon, "CENTER", -2, -3)
-    frame.bombText = bombText
+    function SetPosition(self, x, y)
+      self.frame:ClearAllPoints()
+      self.frame:SetPoint("BOTTOMLEFT", UIP, "BOTTOMLEFT", x, y)
+    end
 
-    local text = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    text:SetPoint("LEFT", bombIcon, "RIGHT", 0, -3)
-    text:SetPoint("RIGHT")
-    text:SetJustifyH("LEFT")
-    text:SetText("1.7s  3.4s 4.5s")
-    frame.text = text
+    local function HandleFrameDragStop(frame)
+      frame:StopMovingOrSizing()
+
+      x = frame:GetLeft()
+      y = frame:GetBottom()
+
+      _DB.InfoBox.offsetX = x
+      _DB.InfoBox.offsetY = y
+    end
+
+    function InfoBox(self)
+      local frame = CreateFrame("Frame")
+      frame:SetPoint("CENTER")
+      frame:SetHeight(64)
+      frame:SetWidth(200)
+
+      local bombIcon = frame:CreateTexture()
+      bombIcon:SetTexture(_BombTexture)
+      bombIcon:SetHeight(24)
+      bombIcon:SetWidth(24)
+      bombIcon:SetPoint("LEFT")
+      bombIcon:SetVertexColor(1, 0, 0)
+      frame.bombIcon = bombIcon
+
+      local bombText = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+      bombText:SetText("3")
+      bombText:SetPoint("CENTER", bombIcon, "CENTER", -2, -3)
+      frame.bombText = bombText
+
+      local text = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+      text:SetPoint("LEFT", bombIcon, "RIGHT", 0, -3)
+      text:SetPoint("RIGHT")
+      text:SetJustifyH("LEFT")
+      text:SetText("1.7s  3.4s 4.5s")
+      frame.text = text
 
 
-    frame:RegisterForDrag("LeftButton")
-    frame:SetScript("OnDragStart", frame.StartMoving)
-    frame:SetScript("OnDragStop", HandleFrameDragStop)
-    frame:EnableMouse(true)
-    frame:SetMovable(true)
+      frame:RegisterForDrag("LeftButton")
+      frame:SetScript("OnDragStart", frame.StartMoving)
+      frame:SetScript("OnDragStop", HandleFrameDragStop)
+      frame:EnableMouse(true)
+      frame:SetMovable(true)
 
-    self.frame = frame
-  end
-endclass "InfoBox"
+      self.frame = frame
+    end
+end)
 --------------------------------------------------------------------------------
-class "Scrubber"
+class "Scrubber" (function(_ENV)
   property "guid" { TYPE = String }
   property "isActive" { TYPE = Boolean, DEFAULT = true }
   property "isExploding" { TYPE = Boolean, DEFAULT = false }
   property "startExploding"
-endclass "Scrubber"
+end)
 -- =============================================================================
 
 function OnLoad(self)
@@ -307,8 +308,10 @@ function ENCOUNTER_END(encounterID, encounterName, difficulty, size, endStatus)
 end
 
 __SystemEvent__()
-function COMBAT_LOG_EVENT_UNFILTERED(timestamp, message, _, sourceGUID, sourceName, _, _, destGUID, destName, destFlags, destFlags2, ...)
+function COMBAT_LOG_EVENT_UNFILTERED()
   if not InEncounter then return end
+
+  local timestamp, message, _, sourceGUID, sourceName, _, _, destGUID, destName, destFlags, destFlags2 = CombatLogGetCurrentEventInfo()
 
   if _M:IsScrubber(sourceGUID) then
     _M:AddScrubber(sourceGUID)
@@ -317,25 +320,25 @@ function COMBAT_LOG_EVENT_UNFILTERED(timestamp, message, _, sourceGUID, sourceNa
   end
 
   if message == "SPELL_CAST_START" then
-    local spellID, spellName = ...
+    local spellID, spellName = select(12, CombatLogGetCurrentEventInfo())
 
     if spellID == ScrubbingSpellID then
       IsCasting[sourceGUID] = true
     end
   elseif message == "SPELL_CAST_SUCCESS" or message == "SPELL_CAST_FAILED" then
-    local spellID, spellName = ...
+    local spellID, spellName = select(12, CombatLogGetCurrentEventInfo())
 
     if spellID == ScrubbingSpellID then
       IsCasting[sourceGUID] = nil
     end
   elseif message == "SPELL_AURA_APPLIED" then
-    local spellID, spellName = ...
+    local spellID, spellName = select(12, CombatLogGetCurrentEventInfo())
     if spellID == ScrubbingExplodingSpellID then
       _M.scrubbers[sourceGUID].startExploding = GetTime()
       _M.scrubbers[sourceGUID].isExploding = true
     end
   elseif message == "SPELL_AURA_REMOVED" then
-    local spellID, spellName = ...
+    local spellID, spellName = select(12, CombatLogGetCurrentEventInfo())
     if spellID == ScrubbingExplodingSpellID then
       _M.scrubbers[sourceGUID].isExploding = false
       _M.scrubbers[sourceGUID].isActive = false
@@ -357,7 +360,7 @@ function IsScrubber(self, guid)
 end
 
 
-__Thread__()
+__Async__()
 function UpdateAll(self)
   while InEncounter do
     for _, frame in pairs(C_NamePlate.GetNamePlates()) do
@@ -492,7 +495,7 @@ function Refresh(self, frame)
 end
 
 __SlashCmd__ "trilliax" "sim"
-__Thread__() __SlashCmd__ "tsc" "sim"
+__Async__() __SlashCmd__ "tsc" "sim"
 function StartSimulationMode()
   local frame = C_NamePlate.GetNamePlateForUnit("target")
   local guid = UnitGUID("target")
