@@ -1,4 +1,10 @@
-# 1.3.0
+# 1.3.1
+
+- Bumped the toc version for 11.1.5
+
+---
+
+## 1.3.0
 
 - Updated for version 11.x
 
